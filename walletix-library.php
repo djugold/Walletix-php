@@ -2,14 +2,16 @@
 
 /*
  * -Cette classe permet d'utiliser les  fonctions de Walletix:
+ *
  * - Générer un code de paiement à partir de l’identifiant de la commande 
  * et du montant à payer. 
  * 
  * -Vérifier l’état d’une opération de paiement (vérifier si une opération de 
  * paiement a bien été effectuée).
  *
+ * - Supprimer une opération / code de paiement 
  *
- * Copyright (c) 2011-2012 Youghourta Benali
+ * Copyright (c) 2011-2013 Youghourta Benali
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -31,10 +33,10 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  **/
 
-//define ('API_PATH','http://localhost/walletix/api/');
 define ('API_PATH','https://www.walletix.com/api/');
 define ('GENERATE_PAYMENT_CODE','paymentcode');
 define ('VERIFY_PAYMENT','paymentverification');
+define ('DELETE_PAYMENT','DeletePayment');
 
 define('WALLETIX_OK',1);
 
@@ -83,8 +85,25 @@ class Walletix{
 			return 0;	
 		}
 	}
+	
+	public function DeletePayment($paiementCode){
+	  
+		if ($this->vendorInfoSet()){
+			$params = array(
+			  'vendorID'          => $this->vendorID, 
+			  'apiKey'            => $this->apiKey, 
+			  'paiementCode'      => $paiementCode,
+			  'format'	  		  => 'xml'
+			);
 
-  private function post($url, $params) {
+			return $this->post(API_PATH.DELETE_PAYMENT, $params);	
+		}else{
+			$this->errorMessage();
+			return 0;	
+		}
+	}
+
+	private function post($url, $params) {
 
 	$result = "";
 	$ch = curl_init();
@@ -98,11 +117,11 @@ class Walletix{
 	return new SimpleXMLElement($result);  
   }
 
-  private function vendorInfoSet(){
+	private function vendorInfoSet(){
     return !(empty($this->vendorID) || empty($this->apiKey));
   }
  
-  private function errorMessage(){
+	private function errorMessage(){
     trigger_error('Required parameters($vendorID and or $apiKey) are missing.', E_USER_WARNING);
   }
   

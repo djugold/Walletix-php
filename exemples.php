@@ -26,7 +26,7 @@ if (WALLETIX_OK == $reponse->status) {
 /* *** Vérifier l'état d'une opération de paiement: code de paiement de l'opération = A83A1 *** */
 
 
-$reponse= $walletix->verifyPayment("A83A1");
+$reponse= $walletix->verifyPayment("2C1F8a");
 if (WALLETIX_OK == $reponse->status) {
   
 	if (WALLETIX_OK == $reponse->result) {
@@ -37,6 +37,22 @@ if (WALLETIX_OK == $reponse->status) {
 }else{
   echo "Erreur lors de la vérification.<br />";
 } 
+
+/* *** Supprimer une opération / code de paiement: code de paiement de l'opération = 2AD8F *** */
+
+
+$reponse= $walletix->DeletePayment("2AD8F");
+if (WALLETIX_OK == $reponse->status) {
+  
+	if (WALLETIX_OK == $reponse->result) {
+		echo "La suppression a bien été effectuée. <br />";
+	}else{
+		echo "La suppression n’a pas été effectuée.<br />";
+	} 
+}else{
+  echo "Erreur lors de la vérification.<br />";
+} 
+
 
 
 ?>
